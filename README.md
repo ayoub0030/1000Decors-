@@ -2,7 +2,7 @@
 
 1000Decor is a bilingual (French/Arabic) web application showcasing Amazigh-Berber carpentry products, with a responsive public-facing website and a secure admin dashboard for product and inquiry management.
 
-![1000Decor Logo](./public/1000Decors-logo.png)
+![1000Decor-logo](https://github.com/user-attachments/assets/7d6517b1-64a0-4f73-8642-ed7b47c081ba)
 
 ## Features
 
