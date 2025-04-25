@@ -1,140 +1,100 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 const LoginPage: React.FC = () => {
   const { t } = useTranslation();
-  const { signIn } = useAuth();
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setIsLoading(true);
     
-    if (!email.trim()) {
-      setMessage({
-        type: 'error',
-        text: t('admin.emailRequired'),
-      });
-      return;
-    }
+    // Check if password is correct using our simplified auth
+    const success = login(password);
     
-    setIsSubmitting(true);
-    setMessage(null);
-    
-    try {
-      const { error } = await signIn(email);
-      
-      if (error) {
-        setMessage({
-          type: 'error',
-          text: error.message,
-        });
-      } else {
-        setMessage({
-          type: 'success',
-          text: t('admin.checkEmail'),
-        });
-        setEmail('');
-      }
-    } catch (error) {
-      setMessage({
-        type: 'error',
-        text: t('admin.loginError'),
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6 }
+    if (success) {
+      navigate('/admin/products');
+    } else {
+      setError(t('admin.login.invalidPassword', 'Invalid password'));
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-parchment flex items-center justify-center px-4">
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={fadeIn}
-        className="max-w-md w-full bg-white shadow-lg rounded-lg overflow-hidden"
-      >
-        <div className="bg-walnut text-white p-6 text-center">
-          <Link to="/" className="inline-block mb-4">
-            <img 
-              src="/assets/brand/logo-light.svg" 
-              alt="1000Decors" 
-              className="h-12 w-auto mx-auto"
-              onError={(e) => { 
-                (e.target as HTMLImageElement).src = '/assets/brand/logo-light-fallback.png';
-              }}
+    <div className="min-h-screen flex items-center justify-center bg-parchment py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-playfair text-walnut mb-8">
+            {t('admin.login.title', 'Admin Login')}
+          </h1>
+          <div className="flex justify-center mb-6">
+            <img
+              src="/src/assets/1000Decors-logo.png"
+              alt="1000Decors"
+              className="h-16 w-auto"
             />
-          </Link>
-          <h1 className="text-2xl font-playfair">{t('admin.loginTitle')}</h1>
-          <p className="text-sand mt-2">{t('admin.loginSubtitle')}</p>
+          </div>
         </div>
         
-        <div className="p-6">
-          {message && (
-            <div 
-              className={`p-4 mb-6 rounded-md ${
-                message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
-              }`}
-            >
-              {message.text}
-            </div>
-          )}
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <p className="text-red-700">{error}</p>
+          </div>
+        )}
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              {t('admin.login.password', 'Password')}
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-turquoise focus:border-turquoise"
+            />
+          </div>
           
-          <form onSubmit={handleSubmit}>
-            <div className="mb-6">
-              <label htmlFor="email" className="block text-walnut font-medium mb-2">
-                {t('common.email')}
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t('admin.emailPlaceholder')}
-                className="w-full px-4 py-2 rounded-md border border-sand focus:outline-none focus:ring-2 focus:ring-turquoise"
-                disabled={isSubmitting}
-              />
-            </div>
-            
+          <div>
             <button
               type="submit"
-              className="w-full bg-turquoise text-white py-3 rounded-md font-semibold hover:bg-opacity-90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-              disabled={isSubmitting}
+              disabled={isLoading}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-turquoise hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-turquoise disabled:opacity-70"
             >
-              {isSubmitting ? (
-                <span className="flex items-center justify-center">
+              {isLoading ? (
+                <span className="flex items-center">
                   <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  {t('common.processing')}
+                  {t('common.loading', 'Loading...')}
                 </span>
               ) : (
-                t('admin.sendLoginLink')
+                t('admin.login.submit', 'Login')
               )}
             </button>
-          </form>
-          
-          <div className="mt-6 text-center">
-            <Link to="/" className="text-turquoise hover:underline">
-              {t('common.backToHome')}
-            </Link>
           </div>
+        </form>
+        
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => navigate('/')}
+            className="text-sm text-turquoise hover:underline"
+          >
+            {t('admin.login.backToSite', 'Back to website')}
+          </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

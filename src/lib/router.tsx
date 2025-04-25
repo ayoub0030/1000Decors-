@@ -20,9 +20,9 @@ import { useAuth } from '../hooks/useAuth';
 
 // Using this component to protect admin routes
 function ProtectedRouteWrapper() {
-  const { session } = useAuth();
+  const { isAuthenticated } = useAuth();
   
-  if (!session) {
+  if (!isAuthenticated) {
     return <Navigate to="/admin/login" replace />;
   }
   

@@ -1,68 +1,54 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { Session } from '@supabase/supabase-js';
-import { supabase } from '../lib/supabase';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-interface AuthContextType {
-  session: Session | null;
-  loading: boolean;
-  signIn: (email: string) => Promise<{ error: any | null }>;
-  signOut: () => Promise<void>;
-}
+// Define the auth context type
+type AuthContextType = {
+  isAuthenticated: boolean;
+  login: (password: string) => boolean;
+  logout: () => void;
+};
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// Create context with default values
+const AuthContext = createContext<AuthContextType>({
+  isAuthenticated: false,
+  login: () => false,
+  logout: () => {},
+});
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
-
+// Create the provider component
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  
+  // Check if user is already authenticated on mount
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        setLoading(false);
-      }
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    const storedAuth = localStorage.getItem('1000decor_admin_auth');
+    if (storedAuth === 'true') {
+      setIsAuthenticated(true);
+    }
   }, []);
 
-  const signIn = async (email: string) => {
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: window.location.origin + '/admin',
-      }
-    });
-    return { error };
+  // Login function - simply check if password matches
+  const login = (password: string): boolean => {
+    if (password === '1000decors') {
+      setIsAuthenticated(true);
+      localStorage.setItem('1000decor_admin_auth', 'true');
+      return true;
+    }
+    return false;
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
+  // Logout function
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('1000decor_admin_auth');
   };
 
-  const value = {
-    session,
-    loading,
-    signIn,
-    signOut,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  // Provide auth context to children
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+// Hook for using auth context
+export const useAuth = () => useContext(AuthContext);
