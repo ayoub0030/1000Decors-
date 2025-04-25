@@ -15,10 +15,13 @@
     "submit": "Soumettre",
     "cancel": "Annuler",
     "save": "Sauvegarder",
+    "saving": "Sauvegarde en cours...",
     "edit": "Modifier",
     "delete": "Supprimer",
     "contactUs": "Contactez-nous",
-    "inquireViaWhatsApp": "Demandez sur WhatsApp"
+    "inquireViaWhatsApp": "Demandez sur WhatsApp",
+    "loading": "Chargement...",
+    "all": "Tous"
   },
   "home": {
     "heroTitle": "Artisanat berbère depuis les années 1500",
@@ -39,6 +42,8 @@
     "motif": "Motif",
     "size": "Taille",
     "allCategories": "Toutes les catégories",
+    "allMotifs": "Tous les motifs",
+    "allSizes": "Toutes les tailles",
     "loadMore": "Charger plus"
   },
   "product": {
@@ -74,7 +79,13 @@
   },
   "admin": {
     "dashboard": "Tableau de bord",
-    "products": "Produits",
+    "products": {
+      "title": "Produits",
+      "create": "Créer un produit",
+      "edit": "Modifier le produit",
+      "nameLabel": "Nom du produit",
+      "slugLabel": "Slug du produit"
+    },
     "inquiries": "Demandes",
     "settings": "Paramètres",
     "newProduct": "Nouveau produit",
@@ -92,10 +103,22 @@
     "inquiryStatus": "Statut",
     "inquiryDate": "Date",
     "replyToInquiry": "Répondre à la demande",
+    "login": {
+      "title": "Connexion Admin",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "backToSite": "Retour au site",
+      "invalidPassword": "Mot de passe incorrect"
+    },
     "loginTitle": "Connexion Admin",
     "loginSubtitle": "Entrez votre email pour recevoir un lien de connexion",
     "emailPlaceholder": "votre@email.com",
     "sendLoginLink": "Envoyer le lien de connexion",
     "checkEmail": "Vérifiez votre email pour le lien de connexion"
+  },
+  "notFound": {
+    "title": "Page Non Trouvée",
+    "message": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "returnHome": "Retour à l'accueil"
   }
 }
