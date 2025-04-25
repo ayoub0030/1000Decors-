@@ -79,13 +79,11 @@
   },
   "admin": {
     "dashboard": "Tableau de bord",
-    "products": {
-      "title": "Produits",
-      "create": "Créer un produit",
-      "edit": "Modifier le produit",
-      "nameLabel": "Nom du produit",
-      "slugLabel": "Slug du produit"
-    },
+    "products": "Produits",
+    "productsCreate": "Créer un produit",
+    "productsEdit": "Modifier le produit",
+    "productsNameLabel": "Nom du produit",
+    "productsSlugLabel": "Slug du produit",
     "inquiries": "Demandes",
     "settings": "Paramètres",
     "newProduct": "Nouveau produit",

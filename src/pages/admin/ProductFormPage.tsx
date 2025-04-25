@@ -127,7 +127,7 @@ const ProductFormPage: React.FC = () => {
   return (
     <div className="bg-parchment p-6 rounded-lg shadow-md">
       <h1 className="text-2xl font-playfair text-walnut mb-6">
-        {isEditMode ? t('admin.products.edit') : t('admin.products.create')}
+        {isEditMode ? t('admin.productsEdit') : t('admin.productsCreate')}
       </h1>
       
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -135,7 +135,7 @@ const ProductFormPage: React.FC = () => {
           {/* Name */}
           <div className="form-group">
             <label htmlFor="name" className="form-label">
-              {t('admin.products.nameLabel')}
+              {t('admin.productsNameLabel')}
             </label>
             <input
               type="text"
@@ -151,7 +151,7 @@ const ProductFormPage: React.FC = () => {
           {/* Slug */}
           <div className="form-group">
             <label htmlFor="slug" className="form-label">
-              {t('admin.products.slugLabel')}
+              {t('admin.productsSlugLabel')}
             </label>
             <input
               type="text"
