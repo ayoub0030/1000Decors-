@@ -131,7 +131,7 @@ const GalleryPage: React.FC = () => {
                       : 'bg-sand bg-opacity-30 text-walnut hover:bg-opacity-50'
                     } transition-colors`}
                 >
-                  {t('common.all', 'All Motifs')}
+                  {t('gallery.allMotifs')}
                 </button>
                 {motifs.map((m) => (
                   <button 
@@ -163,7 +163,7 @@ const GalleryPage: React.FC = () => {
                       : 'bg-sand bg-opacity-30 text-walnut hover:bg-opacity-50'
                     } transition-colors`}
                 >
-                  {t('common.all', 'All Sizes')}
+                  {t('common.all') || 'All Sizes'}
                 </button>
                 {sizes.map((s) => (
                   <button 
