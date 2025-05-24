@@ -40,7 +40,7 @@ const AboutPage: React.FC = () => {
     {
       year: '2010',
       title: 'Combining Tradition & Innovation',
-      description: 'We began incorprinciples while preserving traditional techniques.'
+      description: 'We began incorporating modern design principles while preserving traditional techniques.'
     },
     {
       year: '2025',
